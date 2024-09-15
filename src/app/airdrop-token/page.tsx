@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useWalletConnection } from "@/hooks/useWalletConnects";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { ConnectWalletMessage } from "@/components/ErrorWalletConnectMessage/Message";
 
 function RequestAirdrop() {
   const [balance, setBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [amount, setAmount] = useState(0);
   const { wallet, connection } = useWalletConnection();
 
@@ -23,15 +25,14 @@ function RequestAirdrop() {
           wallet.publicKey,
           amount * LAMPORTS_PER_SOL
         );
+        setShowConfirmation(true);
       } catch (error) {
-        console.log("Nhi hoa", error);
+        console.log("Error", error);
       }
-      console.log(
-        "Airdropped " + amount + " SOL to " + wallet.publicKey.toBase58()
-      );
-      alert("Airdropped " + amount + " SOL to " + wallet.publicKey.toBase58());
-    } else {
-      alert("Please connect your wallet first");
+      // console.log(
+      //   "Airdropped " + amount + " SOL to " + wallet.publicKey.toBase58()
+      // );
+      // alert("Airdropped " + amount + " SOL to " + wallet.publicKey.toBase58());
     }
   }
 
@@ -45,6 +46,20 @@ function RequestAirdrop() {
       }
     }
   }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulate sending token
+    await requestAirdrop();
+    setIsLoading(false);
+    setShowConfirmation(true);
+  };
+
+  const resetForm = () => {
+    setAmount(0);
+    setShowConfirmation(false);
+  };
 
   return (
     <div>
@@ -60,7 +75,7 @@ function RequestAirdrop() {
               </h3>
               <p className="text-2xl font-bold text-white">{balance}</p>
             </div>
-            <form onSubmit={requestAirdrop} className="space-y-6 rounded-2xl">
+            <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl">
               <div>
                 <label
                   htmlFor="amount"
@@ -79,18 +94,34 @@ function RequestAirdrop() {
               </div>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !amount}
                 className="w-80 mx-6 bg-transparent border hover:ring-blue-900 text-white rounded-lg py-3 px-4 font-medium focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-offset-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Processing..." : "Airdrop Tokens"}
               </button>
             </form>
           </div>
+          {showConfirmation && (
+            <div className="fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center">
+              <div className="bg-transparent border p-6 rounded-lg shadow-xl">
+                <h2 className="text-xl font-bold mb-4 text-white">
+                  Airdrop Successful
+                </h2>
+                <p className="mb-4 text-white">
+                  You have successfully airdrop {amount} of sol.
+                </p>
+                <button
+                  onClick={resetForm}
+                  className="w-full bg-transparent border text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
-        <div className="text-2xl text-white font-serif">
-          Please Connect Your Wallet First !
-        </div>
+        <ConnectWalletMessage />
       )}
     </div>
   );

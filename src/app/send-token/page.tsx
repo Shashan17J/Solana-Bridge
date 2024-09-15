@@ -7,6 +7,7 @@ import {
   Transaction,
 } from "@solana/web3.js";
 import { useWalletConnection } from "@/hooks/useWalletConnects";
+import { ConnectWalletMessage } from "@/components/ErrorWalletConnectMessage/Message";
 
 function SendToken() {
   const [recipient, setRecipient] = useState("");
@@ -15,14 +16,6 @@ function SendToken() {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { wallet, connection } = useWalletConnection();
-
-  if (wallet.connected && wallet.publicKey) {
-    try {
-      console.log("Connected");
-    } catch (error: any) {
-      alert(`Transaction failed: ${error.message}`);
-    }
-  }
 
   async function sendToken() {
     if (wallet.connected && wallet.publicKey) {
@@ -36,7 +29,6 @@ function SendToken() {
           })
         );
         await wallet.sendTransaction(transaction, connection);
-        alert("Transaction Successfully Sent" + amount + "SOL to" + recipient);
       } catch (error) {
         console.log("Could not sent", error);
       }
@@ -105,14 +97,6 @@ function SendToken() {
                   />
                 </div>
                 <div className="mt-6">
-                  {/* <button
-                    type="submit"
-                    className={`w-80 mx-6 bg-transparent border text-white rounded-lg py-3 px-4 font-medium hover:ring-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                      isLoading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    {isLoading ? "Sending..." : "Send SOL"}
-                  </button> */}
                   <button
                     type="submit"
                     className={`w-80 mx-6 bg-transparent border text-white rounded-lg py-3 px-4 font-medium hover:ring-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
@@ -138,17 +122,17 @@ function SendToken() {
           </div>
 
           {showConfirmation && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-lg shadow-xl">
-                <h2 className="text-xl font-bold mb-4 text-slate-900">
+            <div className="fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center">
+              <div className="bg-transparent border p-6 rounded-lg shadow-xl">
+                <h2 className="text-xl font-bold mb-4 text-white">
                   Transaction Confirmed
                 </h2>
-                <p className="mb-4 text-slate-700">
+                <p className="mb-4 text-white">
                   You have successfully sent {amount} SOL to {recipient}.
                 </p>
                 <button
                   onClick={resetForm}
-                  className="w-full bg-slate-900 text-white py-2 px-4 rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                  className="w-full bg-transparent border text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                 >
                   Close
                 </button>
@@ -157,8 +141,8 @@ function SendToken() {
           )}
         </div>
       ) : (
-        <div className="text-2xl text-white font-serif">
-          Please Connect Your Wallet First !
+        <div>
+          <ConnectWalletMessage />
         </div>
       )}
     </div>

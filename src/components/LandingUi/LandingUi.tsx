@@ -20,10 +20,10 @@ export function LandingUi() {
           }}
           className="relative flex flex-col gap-4 items-center justify-center px-4 w-full"
         >
-          <div className="text-3xl md:text-7xl font-bold dark:text-white text-white text-center">
+          <div className="text-3xl md:text-7xl sm:text-5xl font-bold dark:text-white text-white text-center">
             Experience the Future of Digital Assets on Solana
           </div>
-          <div className="font-extralight text-base md:text-4xl text-white dark:text-neutral-200 py-4">
+          <div className="font-extralight text-base md:text-4xl sm:text-2xl text-white dark:text-neutral-200 py-4">
             Add your wallet to continue.
           </div>
           <WalletButtons />

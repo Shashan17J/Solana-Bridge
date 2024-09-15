@@ -4,6 +4,7 @@ import "./globals.css";
 import { WalletConnections } from "@/components/WalletImports/page";
 import { AuroraBackground } from "@/components/ui/aurora-background/aurora-background";
 import { NavbarMenu } from "@/components/Navbar/Navbar";
+import { LoadingProvider } from "@/hooks/LoadingProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,8 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuroraBackground>
-          <NavbarMenu />
-          <WalletConnections>{children}</WalletConnections>
+          <LoadingProvider>
+            <NavbarMenu />
+            <WalletConnections>{children}</WalletConnections>
+          </LoadingProvider>
         </AuroraBackground>
       </body>
     </html>

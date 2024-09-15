@@ -7,6 +7,11 @@ import {
   // ProductItem,
 } from "@/components/ui/Navbar/navbar";
 import { cn } from "@/lib/utils";
+import Logo from "../../../public/icons/solana.webp";
+import Image from "next/image";
+import { useWalletConnection } from "@/hooks/useWalletConnects";
+import { useRouter } from "next/navigation";
+import { ConnectWalletMessage } from "../ErrorWalletConnectMessage/Message";
 
 export function NavbarMenu() {
   return (
@@ -18,14 +23,57 @@ export function NavbarMenu() {
 
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
+  const { wallet } = useWalletConnection();
+  const router = useRouter();
   return (
     <div
       className={cn(
-        "fixed top-10 inset-x-0 max-w-2xl mx-auto mt-4 z-50 w-fit border rounded-full",
+        "fixed top-10 inset-x-0 flex items-center justify-between mt-4 z-50 w-screen",
         className
       )}
     >
-      {/* <Menu setActive={setActive}>
+      {/* Left aligned logo */}
+      <div className="flex items-center cursor-pointer ml-5">
+        <Image
+          src={Logo}
+          alt="Logo"
+          className="h-14 w-14"
+          onClick={() => router.push("/")}
+        />
+      </div>
+
+      <div className="flex text-white sm:text-lg text-sm py-3 sm:px-6 px-3 sm:gap-6 gap-3 mr-5">
+        <a
+          href="/airdrop-token"
+          className="cursor-pointer sm:hover:text-xl hover:text-base transition-all duration-300 hover:text-blue-300"
+        >
+          Airdrop Token
+        </a>
+        <a
+          href="/send-token"
+          className="cursor-pointer sm:hover:text-xl hover:text-base transition-all duration-300 hover:text-blue-300"
+        >
+          Send Token
+        </a>
+        <a
+          href="/sign-message"
+          className="cursor-pointer sm:hover:text-xl hover:text-base transition-all duration-300 hover:text-blue-300"
+        >
+          Sign Message
+        </a>
+        <a
+          href="/token-launchpad"
+          className="cursor-pointer sm:hover:text-xl hover:text-base transition-all duration-300 hover:text-blue-300"
+        >
+          Mint Token
+        </a>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* <Menu setActive={setActive}>
         <MenuItem setActive={setActive} active={active} item="Services">
           <div className="flex flex-col space-y-4 text-sm">
             <HoveredLink href="/airdrop-token">Airdrop Token</HoveredLink>
@@ -70,21 +118,5 @@ function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/enterprise">Enterprise</HoveredLink>
           </div>
         </MenuItem>
-      </Menu> */}
-      <div className="flex text-white sm:text-lg text-sm sm:py-6 py-3 sm:px-6 px-3 sm:gap-6 gap-3">
-        <a href="/airdrop-token" className="cursor-pointer">
-          Airdrop Token
-        </a>
-        <a href="/send-token" className="cursor-pointer">
-          Send Token
-        </a>
-        <a href="/sign-message" className="cursor-pointer">
-          Sign Message
-        </a>
-        <a href="/token-launchpad" className="cursor-pointer">
-          Mint Token
-        </a>
-      </div>
-    </div>
-  );
+      </Menu> */
 }

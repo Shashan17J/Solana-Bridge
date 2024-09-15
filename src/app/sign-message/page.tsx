@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import bs58 from "bs58";
-// import * as ed25519 from "@noble/ed25519";
 import { ed25519 } from "@noble/curves/ed25519";
 import { useWalletConnection } from "@/hooks/useWalletConnects";
 
@@ -72,7 +71,7 @@ export default function SignMessage() {
               <div className="mt-6">
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || !message}
                   className="w-80 mx-10 bg-transparent border text-white rounded-lg py-3 px-4 font-medium focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-offset-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleSigningMessage}
                 >
