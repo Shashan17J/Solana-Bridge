@@ -6,6 +6,7 @@ import bs58 from "bs58";
 import { ed25519 } from "@noble/curves/ed25519";
 import { useWalletConnection } from "@/hooks/useWalletConnects";
 
+// Verify the Ownership of wallet
 export default function SignMessage() {
   const { publicKey, signMessage } = useWallet();
   const [message, setMessage] = useState("");
@@ -23,10 +24,13 @@ export default function SignMessage() {
       if (!publicKey) throw new Error("Wallet not connected!");
       if (!signMessage)
         throw new Error("Wallet does not support message signing!");
-
+      // covert string to bytes
       const encodedMessage = new TextEncoder().encode(message);
+
+      // sends to web2 server (ex tensor[NFT])
       const signature = await signMessage(encodedMessage);
 
+      // it validate that (that this signature done by the "prviate key" who is corresponding to this "public key" )
       if (!ed25519.verify(signature, encodedMessage, publicKey.toBytes())) {
         console.log("Message signature invalid!");
       }

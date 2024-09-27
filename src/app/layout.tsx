@@ -5,6 +5,7 @@ import { WalletConnections } from "@/components/WalletImports/page";
 import { AuroraBackground } from "@/components/ui/aurora-background/aurora-background";
 import { NavbarMenu } from "@/components/Navbar/Navbar";
 import { LoadingProvider } from "@/hooks/LoadingProvider";
+import { lazy, Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
